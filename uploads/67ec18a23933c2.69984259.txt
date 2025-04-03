@@ -1,0 +1,1171 @@
+Sub TransferData()
+    Dim wsJanv As Worksheet
+    Dim wsFevr As Worksheet
+    Dim wsBCO As Worksheet
+    Dim wbSourceJanv As Workbook
+    Dim wbSourceFevr As Workbook
+    Dim wbTarget As Workbook
+
+    ' Ouvrir les fichiers source
+    Set wbSourceJanv = Workbooks.Open("Chemin\Vers\TRAFIC_PAR_OPERATEUR Janv.xlsx")
+    Set wbSourceFevr = Workbooks.Open("Chemin\Vers\TRAFIC_PAR_OPERATEUR Fevr.xlsx")
+    
+    ' Ouvrir ou activer le fichier cible
+    Set wbTarget = Workbooks.Open("Chemin\Vers\trafic ParOperateur_BCO 2021 Sept21 vf.xls2.xls")
+
+    ' Assigner les feuilles
+    Set wsJanv = wbSourceJanv.Sheets("NomFeuilleJanv")
+    Set wsFevr = wbSourceFevr.Sheets("NomFeuilleFevr")
+    Set wsBCO = wbTarget.Sheets("NomFeuilleBCO")
+    
+    ' Copier les données de janvier
+    wsJanv.Range("A1:Z100").Copy Destination:=wsBCO.Range("A1")
+    
+    ' Copier les données de février en dessous de janvier
+    wsFevr.Range("A1:Z100").Copy Destination:=wsBCO.Range("A101")
+    
+    ' Fermer les fichiers source sans sauver les changements
+    wbSourceJanv.Close SaveChanges:=False
+    wbSourceFevr.Close SaveChanges:=False
+    
+    ' Indiquer que le processus est terminé
+    MsgBox "Les données ont été transférées avec succès!"
+End Sub
+
+
+
+
+
+
+
+
+Sub AutomatiserTrafic()
+    Dim wbSource As Workbook, wbDestination As Workbook
+    Dim wsSource As Worksheet
+    Dim wsDestinationEntrants As Worksheet, wsDestinationSortants As Worksheet
+    Dim plageSource As Range
+    Dim fichierSource As String, fichierDestination As String
+    Dim moisComplet As String, annee As String
+
+    ' Sélectionner le fichier source
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = "Sélectionnez le fichier source"
+        .Filters.Clear
+        .Filters.Add "Fichiers Excel", "*.xls; *.xlsx"
+        If .Show = -1 Then
+            fichierSource = .SelectedItems(1)
+        Else
+            MsgBox "Aucun fichier source sélectionné.", vbExclamation
+            Exit Sub
+        End If
+    End With
+
+    ' Extraire le mois et l'année à partir du nom du fichier source
+    moisComplet = ExtraireMoisDuNom(fichierSource)
+    annee = ExtraireAnneeDuNom(fichierSource)
+
+    If moisComplet = "" Then
+        MsgBox "Le mois n'a pas pu être extrait du nom du fichier source.", vbExclamation
+        Exit Sub
+    End If
+
+    ' Sélectionner le fichier de destination
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = "Sélectionnez le fichier de destination"
+        .Filters.Clear
+        If .Show = -1 Then
+            fichierDestination = .SelectedItems(1)
+        Else
+            MsgBox "Aucun fichier de destination sélectionné.", vbExclamation
+            Exit Sub
+        End If
+    End With
+
+    ' Ouvrir les fichiers source et destination
+    Set wbSource = Workbooks.Open(fichierSource)
+    Set wbDestination = Workbooks.Open(fichierDestination)
+
+    ' Récupérer la feuille source
+    Set wsSource = wbSource.Sheets(1)
+
+    ' Créer ou vérifier les feuilles de destination en fonction du mois et de l'année
+    Set wsDestinationEntrants = CreerOuVerifierFeuille(wbDestination, "Entrants", moisComplet, annee)
+    Set wsDestinationSortants = CreerOuVerifierFeuille(wbDestination, "Sortants", moisComplet, annee)
+
+    ' Initialiser les cellules des feuilles Entrants et Sortants
+    InitialiserCellules wsDestinationEntrants
+    
+    'ENTRANT'
+'''''''''''''''''''''''''''''''''''''''
+
+'INITIATILATION A 0
+    For p = 23 To 38
+    'Copier le total vers CA
+    wsDestination.Cells(p, 10) = 0
+    'Copier Normal
+   wsDestination.Cells(p, 2) = 0
+   wsDestination.Cells(p, 3) = 0
+    'Copier transit
+wsDestination.Cells(p, 4) = 0
+    wsDestination.Cells(p, 5) = 0
+    'Copier Roaming
+    wsDestination.Cells(p, 6) = 0
+    wsDestination.Cells(p, 7) = 0
+    Next p
+'POUR COPIER PREPAID POSTPAID
+'POSTPAID    ONATEL-NATIONAL
+wsDestination.Cells(16, 2) = 0
+wsDestination.Cells(16, 3) = 0
+wsDestination.Cells(16, 5) = 0
+'POSTPAID ONATEL-OUAGA
+wsDestination.Cells(15, 2) = 0
+wsDestination.Cells(15, 3) = 0
+wsDestination.Cells(15, 5) = 0
+'POSTPAID OrangeBF
+wsDestination.Cells(12, 2) = 0
+wsDestination.Cells(12, 3) = 0
+wsDestination.Cells(12, 5) = 0
+'POSTPAID TELMOB
+wsDestination.Cells(13, 2) = 0
+wsDestination.Cells(13, 3) = 0
+wsDestination.Cells(13, 5) = 0
+'PREPAID    ONATEL-NATIONAL
+wsDestination.Cells(8, 2) = 0
+wsDestination.Cells(8, 3) = 0
+wsDestination.Cells(8, 5) = 0
+'PREPAID ONATEL-OUAGA
+wsDestination.Cells(7, 2) = 0
+wsDestination.Cells(7, 3) = 0
+wsDestination.Cells(7, 5) = 0
+'PREPAID VAS ET VERTS
+wsDestination.Cells(9, 2) = 0
+wsDestination.Cells(9, 3) = 0
+wsDestination.Cells(9, 5) = 0
+'PREPAID OrangeBF
+wsDestination.Cells(4, 2) = 0
+wsDestination.Cells(4, 3) = 0
+wsDestination.Cells(4, 5) = 0
+'PREPAID TELMOB
+wsDestination.Cells(5, 2) = 0
+wsDestination.Cells(5, 3) = 0
+wsDestination.Cells(5, 5) = 0
+    
+    
+    InitialiserCellules wsDestinationSortants
+    
+    'SORTANT'
+'''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''
+'INITIATILATION A 0
+    For p = 23 To 38
+    'Copier Normal
+    wsDestination.Cells(p, 2) = 0
+    wsDestination.Cells(p, 3) = 0
+    wsDestination.Cells(p, 4) = 0
+    'Copier transit
+    wsDestination.Cells(p, 5) = 0
+   wsDestination.Cells(p, 6) = 0
+    wsDestination.Cells(p, 7) = 0
+    'Copier Roaming
+wsDestination.Cells(p, 8) = 0
+    wsDestination.Cells(p, 9) = 0
+    wsDestination.Cells(p, 10) = 0
+    Next p
+    'POUR COPIER PREPAID POSTPAID
+'POSTPAID    ONATEL-NATIONAL
+wsDestination.Cells(16, 2) = 0
+wsDestination.Cells(16, 3) = 0
+wsDestination.Cells(16, 5) = 0
+'POSTPAID ONATEL-OUAGA
+wsDestination.Cells(15, 2) = 0
+wsDestination.Cells(15, 3) = 0
+wsDestination.Cells(15, 5) = 0
+'POSTPAID OrangeBF
+wsDestination.Cells(12, 2) = 0
+wsDestination.Cells(12, 3) = 0
+wsDestination.Cells(12, 5) = 0
+'POSTPAID TELMOB
+wsDestination.Cells(13, 2) = 0
+wsDestination.Cells(13, 3) = 0
+wsDestination.Cells(13, 5) = 0
+'PREPAID    ONATEL-NATIONAL
+wsDestination.Cells(8, 2) = 0
+wsDestination.Cells(8, 3) = 0
+wsDestination.Cells(8, 5) = 0
+'PREPAID ONATEL-OUAGA
+wsDestination.Cells(7, 2) = 0
+wsDestination.Cells(7, 3) = 0
+wsDestination.Cells(7, 5) = 0
+'PREPAID VAS ET VERTS
+wsDestination.Cells(9, 2) = 0
+wsDestination.Cells(9, 3) = 0
+wsDestination.Cells(9, 5) = 0
+'PREPAID OrangeBF
+wsDestination.Cells(4, 2) = 0
+wsDestination.Cells(4, 3) = 0
+wsDestination.Cells(4, 5) = 0
+'PREPAID TELMOB
+wsDestination.Cells(5, 2) = 0
+wsDestination.Cells(5, 3) = 0
+wsDestination.Cells(5, 5) = 0
+    
+
+    ' Copier les données vers les deux feuilles
+    CopierVersFeuille wsSource, wsDestinationEntrants, "Entrants"
+    
+    
+    'POUR COPIER PREPAID POSTPAID
+'POSTPAID    ONATEL-NATIONAL
+wsSource.Cells(9, 5).Copy wsDestination.Cells(16, 2)
+wsSource.Cells(9, 6).Copy wsDestination.Cells(16, 3)
+wsSource.Cells(9, 7).Copy wsDestination.Cells(16, 5)
+'POSTPAID ONATEL-OUAGA
+wsSource.Cells(10, 5).Copy wsDestination.Cells(15, 2)
+wsSource.Cells(10, 6).Copy wsDestination.Cells(15, 3)
+wsSource.Cells(10, 7).Copy wsDestination.Cells(15, 5)
+'POSTPAID OrangeBF
+wsSource.Cells(11, 5).Copy wsDestination.Cells(12, 2)
+wsSource.Cells(11, 6).Copy wsDestination.Cells(12, 3)
+wsSource.Cells(11, 7).Copy wsDestination.Cells(12, 5)
+'POSTPAID TELMOB
+wsSource.Cells(12, 5).Copy wsDestination.Cells(13, 2)
+wsSource.Cells(12, 6).Copy wsDestination23.Cells(13, 3)
+wsSource.Cells(12, 7).Copy wsDestination.Cells(13, 5)
+
+
+'PREPAID ONATEL - NATIONAL
+wsSource.Cells(3, 5).Copy wsDestination.Cells(8, 2)
+wsSource.Cells(3, 6).Copy wsDestination.Cells(8, 3)
+wsSource.Cells(3, 7).Copy wsDestination.Cells(8, 5)
+'PREPAID ONATEL - OUAGA
+wsSource.Cells(4, 5).Copy wsDestination.Cells(7, 2)
+wsSource.Cells(4, 6).Copy wsDestination.Cells(7, 3)
+wsSource.Cells(4, 7).Copy wsDestination.Cells(7, 5)
+'PREPAID VAS ET VERTS
+wsSource.Cells(5, 5).Copy wsDestination.Cells(9, 2)
+wsSource.Cells(5, 6).Copy wsDestination.Cells(9, 3)
+wsSource.Cells(5, 7).Copy wsDestination.Cells(9, 5)
+'PREPAID OrangeBF
+wsSource.Cells(6, 5).Copy wsDestination.Cells(4, 2)
+wsSource.Cells(6, 6).Copy wsDestination.Cells(4, 3)
+wsSource.Cells(6, 7).Copy wsDestination.Cells(4, 5)
+'PREPAID TELMOB
+wsSource.Cells(7, 5).Copy wsDestination.Cells(5, 2)
+wsSource.Cells(7, 6).Copy wsDestination.Cells(5, 3)
+wsSource.Cells(7, 7).Copy wsDestination.Cells(5, 5)
+    
+    
+    CopierVersFeuille wsSource, wsDestinationSortants, "Sortants"
+    
+    
+
+
+
+
+
+'POUR COPIER PREPAID POSTPAID
+'POSTPAID    ONATEL-NATIONAL
+wsSource.Cells(9, 16).Copy wsDestination.Cells(16, 2)
+wsSource.Cells(9, 17).Copy wsDestination.Cells(16, 3)
+wsSource.Cells(9, 18).Copy wsDestination.Cells(16, 5)
+'POSTPAID ONATEL-OUAGA
+wsSource.Cells(10, 16).Copy wsDestination.Cells(15, 2)
+wsSource.Cells(10, 17).Copy wsDestination.Cells(15, 3)
+wsSource.Cells(10, 18).Copy wsDestination.Cells(15, 5)
+'POSTPAID OrangeBF
+wsSource.Cells(11, 16).Copyws Destination.Cells(12, 2)
+wsSource.Cells(11, 17).Copy wsDestination.Cells(12, 3)
+wsSource.Cells(11, 18).Copy wsDestination.Cells(12, 5)
+'POSTPAID TELMOB
+wsSource.Cells(12, 16).Copy wsDestination.Cells(13, 2)
+wsSource.Cells(12, 17).Copy wsDestination.Cells(13, 3)
+wsSource.Cells(12, 18).Copy wsDestination.Cells(13, 5)
+
+
+'PREPAID    ONATEL-NATIONAL
+wsSource.Cells(3, 16).Copy wsDestination.Cells(8, 2)
+wsSource.Cells(3, 17).Copy wsDestination.Cells(8, 3)
+wsSource.Cells(3, 18).Copy wsDestination.Cells(8, 5)
+'PREPAID ONATEL-OUAGA
+wsSource.Cells(4, 16).Copy wsDestination.Cells(7, 2)
+wsSource.Cells(4, 17).Copy wsDestination.Cells(7, 3)
+wsSource.Cells(4, 18).Copy wsDestination.Cells(7, 5)
+'PREPAID VAS ET VERTS
+wsSource.Cells(5, 16).Copy wsDestination.Cells(9, 2)
+wsSource.Cells(5, 17).Copy wsDestination.Cells(9, 3)
+wsSource.Cells(5, 18).Copy wsDestination.Cells(9, 5)
+'PREPAID OrangeBF
+wsSource.Cells(6, 16).Copy wsDestination.Cells(4, 2)
+wsSource.Cells(6, 17).Copy wsDestination.Cells(4, 3)
+wsSource.Cells(6, 18).Copy wsDestination.Cells(4, 5)
+'PREPAID TELMOB
+wsSource.Cells(7, 16).Copy wsDestination.Cells(5, 2)
+wsSource.Cells(7, 17).Copy wsDestination.Cells(5, 3)
+wsSource.Cells(7, 18).Copy wsDestination.Cells(5, 5)
+
+
+    ' Copier les données internationales pour Entrants
+    CopierInternational wsSource, wsDestinationEntrants, "Entrants"
+    
+    
+    
+    
+
+    ' Copier les données internationales pour Sortants
+    CopierInternational wsSource, wsDestinationSortants, "Sortants"
+    
+    
+    
+    'POUR COPIER INTERNATIONAL
+For i = 14 To 24
+    For p = 23 To 38
+    If Feuil32.Cells(i, 2) = Feuil24.Cells(p, 1) Then
+    'Copier Normal
+    wsSource.Cells(i, 16).Copy wsDestination.Cells(p, 2)
+    wsSource.Cells(i, 17).Copy wsDestination.Cells(p, 3)
+    wsSource.Cells(i, 18).Copy wsDestination.Cells(p, 4)
+    
+    'Copier roaming
+   wsSource.Cells(i, 22).Copy wsDestination.Cells(p, 5)
+wsSource.Cells(i, 23).Copy wsDestination.Cells(p, 6)
+    wsSource.Cells(i, 24).Copy wsDestination.Cells(p, 7)
+
+    'Copier transit
+wsSource.Cells(i, 19).Copy wsDestination.Cells(p, 8)
+    wsSource.Cells(i, 20).Copy wsDestination.Cells(p, 9)
+    wsSource.Cells(i, 21).Copy wsDestination.Cells(p, 10)
+    
+    End If
+    Next p
+Next i
+
+    ' Sauvegarder et fermer les fichiers
+    wbDestination.Save
+    wbDestination.Close
+    wbSource.Close
+    MsgBox "Traitement terminé avec succès !", vbInformation
+End Sub
+
+Function ExtraireMoisDuNom(fichierSource As String) As String
+    Dim regex As Object, mois As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "(Janvier|Février|Mars|Avril|Mai|Juin|Juillet|Août|Septembre|Octobre|Novembre|Décembre)"
+    If regex.Test(fichierSource) Then
+        mois = regex.Execute(fichierSource)(0)
+    Else
+        mois = ""
+    End If
+    ExtraireMoisDuNom = mois
+End Function
+
+Function ExtraireAnneeDuNom(fichierSource As String) As String
+    Dim regex As Object, annee As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "\d{4}"
+    If regex.Test(fichierSource) Then
+        annee = regex.Execute(fichierSource)(0)
+    Else
+        annee = ""
+    End If
+    ExtraireAnneeDuNom = annee
+End Function
+
+Function CreerOuVerifierFeuille(wb As Workbook, prefixe As String, mois As String, annee As String) As Worksheet
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = wb.Sheets(prefixe & "_" & mois & "_" & annee)
+    If ws Is Nothing Then
+        Set ws = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
+        ws.Name = prefixe & "_" & mois & "_" & annee
+    End If
+    On Error GoTo 0
+    Set CreerOuVerifierFeuille = ws
+End Function
+
+
+
+
+
+    
+
+
+
+
+
+'Pour vérifier les chiffres pour Entrants
+wsSource.Cells(26, 2).Value = wsSource.Cells(8, 5).Value + wsSource.Cells(8, 6).Value + wsSource.Cells(8, 7).Value
+wsSource.Cells(26, 3).Value = wsDestination.Cells(6, 2).Value + wsDestination.Cells(6, 3).Value + wsDestination.Cells(6, 5).Value + wsDestination.Cells(10, 2).Value + wsDestination.Cells(10, 3).Value + wsDestination.Cells(10, 5).Value
+wsSource.Cells(27, 2).Value = wsSource.Cells(13, 5).Value + wsSource.Cells(13, 6).Value + wsSource.Cells(13, 7).Value
+wsSource.Cells(27, 3).Value = wsDestination.Cells(14, 2).Value + wsDestination.Cells(14, 3).Value + wsDestination.Cells(14, 5).Value + wsDestination.Cells(17, 2).Value + wsDestination.Cells(17, 3).Value + wsDestination.Cells(17, 5).Value
+wsSource.Cells(28, 2).Value = wsSource.Cells(25, 5).Value + wsSource.Cells(25, 6).Value + wsSource.Cells(25, 8).Value + wsSource.Cells(25, 9).Value + wsSource.Cells(25, 12).Value + wsSource.Cells(25, 13).Value + wsSource.Cells(25, 15).Value
+wsSource.Cells(28, 3).Value = wsDestination.Cells(39, 2).Value + wsDestination.Cells(39, 3).Value + wsDestination.Cells(39, 4).Value + wsDestination.Cells(39, 5).Value + wsDestination.Cells(39, 6).Value + wsDestination.Cells(39, 7).Value + wsDestination.Cells(39, 10).Value
+
+
+
+
+
+
+'Pour vérifier les chiffres pour Sortants
+wsSource.Cells(26, 5).Value = wsSource.Cells(8, 16).Value + wsSource.Cells(8, 17).Value + wsSource.Cells(8, 18).Value
+wsSource.Cells(26, 6).Value = Feuil23.Cells(6, 2).Value + wsDestination.Cells(6, 3).Value + wsDestination.Cells(6, 5).Value + wsDestination.Cells(10, 2).Value + wsDestination.Cells(10, 3).Value + wsDestination.Cells(10, 5).Value
+wsSource.Cells(27, 5).Value = wsSource.Cells(13, 16).Value + wsSource.Cells(13, 17).Value + wsSource.Cells(13, 18).Value
+wsSource.Cells(27, 6).Value = Feuil23.Cells(14, 2).Value + wsDestination.Cells(14, 3).Value + wsDestination.Cells(14, 5).Value + wsDestination.Cells(17, 2).Value + wsDestination.Cells(17, 3).Value + wsDestination.Cells(17, 5).Value
+wsSource.Cells(28, 5).Value = wsSource.Cells(25, 16).Value + wsSource.Cells(25, 17).Value + wsSource.Cells(25, 18).Value + wsSource.Cells(25, 19).Value + wsSource.Cells(25, 20).Value + wsSource.Cells(25, 21).Value + wsSource.Cells(25, 22).Value + wsSource.Cells(25, 23).Value + wsSource.Cells(25, 24).Value + wsSource.Cells(25, 25).Value
+wsSource.Cells(28, 6).Value = Feuil23.Cells(39, 2).Value + wsDestination.Cells(39, 3).Value + wsDestination.Cells(39, 4).Value + wsDestination.Cells(39, 5).Value + wsDestination.Cells(39, 6).Value + wsDestination.Cells(39, 7).Value + wsDestination.Cells(39, 8).Value + wsDestination.Cells(39, 9).Value + wsDestination.Cells(39, 10).Value
+
+
+
+
+Sub CopierInternational(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    Dim i As Integer, p As Integer
+    Dim x, y, z, r As Double
+    For i = 14 To 24
+        For p = 23 To 38
+            If wsSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                wsDestination.Cells(p, 10).Value = wsSource.Cells(i, 15).Value
+                wsDestination.Cells(p, 2).Value = wsSource.Cells(i, 5).Value
+                wsDestination.Cells(p, 3).Value = wsSource.Cells(i, 6).Value
+                If wsSource.Cells(i, 5) <> 0 Then
+                x = wsSource.Cells(i, 6).Value
+    y = wsSource.Cells(i, 5).Value
+    z = x / y
+    wsSource.Cells(p, 8).Value = z
+    End If
+                wsDestination.Cells(p, 4).Value = wsSource.Cells(i, 8).Value
+                wsDestination.Cells(p, 5).Value = wsSource.Cells(i, 9).Value
+                wsDestination.Cells(p, 6).Value = wsSource.Cells(i, 12).Value
+                wsDestination.Cells(p, 7).Value = wsSource.Cells(i, 13).Value
+            End If
+        Next p
+    Next i
+End Sub
+
+Sub InitialiserCellules(ws As Worksheet)
+    Dim i As Integer
+    For i = 2 To 10
+        ws.Cells(i, 1).Value = 0
+        ws.Cells(i, 2).Value = 0
+        ws.Cells(i, 3).Value = 0
+        ws.Cells(i, 4).Value = 0
+    Next i
+End Sub
+
+
+
+
+
+
+
+
+' Fonction pour copier les données des feuilles source vers les feuilles de destination
+Sub CopierVersFeuille(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    Dim i As Integer, p As Integer
+    ' Parcours les lignes de la source et la destination pour copier les données
+  For i = 3 To 5
+        ' Parcourir la première plage (4 à 10)
+        For p = 4 To 10
+            If wsSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                wsDestination.Cells(p, 2).Value = wsSource.Cells(i, 9).Value
+                wsDestination.Cells(p, 3).Value = wsSource.Cells(i, 10).Value
+                wsDestination.Cells(p, 5).Value = wsSource.Cells(i, 11).Value
+            End If
+        Next p
+        
+        ' Parcourir la deuxième plage (12 à 17)
+        For p = 12 To 17
+            If wsSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                wsDestination.Cells(p, 2).Value = wsSource.Cells(i, 15).Value
+                wsDestination.Cells(p, 3).Value = wsSource.Cells(i, 16).Value
+                wsDestination.Cells(p, 5).Value = wsSource.Cells(i, 17).Value
+            End If
+        Next p
+    Next i
+End Sub
+
+
+
+
+
+
+
+
+Sub AutomatiserTrafic()
+    ' Déclaration des variables nécessaires
+    Dim wbSource As Workbook, wbDestination As Workbook
+    Dim wsSource As Worksheet
+    Dim wsDestinationEntrants As Worksheet, wsDestinationSortants As Worksheet
+    Dim plageSource As Range
+    Dim fichierSource As String, fichierDestination As String
+    Dim moisComplet As String, annee As String
+
+    ' Sélectionner le fichier source via un dialogue de fichiers
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = "Sélectionnez le fichier source"
+        .Filters.Clear
+        .Filters.Add "Fichiers Excel", "*.xls; *.xlsx"
+        If .Show = -1 Then
+            fichierSource = .SelectedItems(1) ' Récupère le chemin du fichier sélectionné
+        Else
+            MsgBox "Aucun fichier source sélectionné.", vbExclamation
+            Exit Sub ' Si aucun fichier n'est sélectionné, quitter la procédure
+        End If
+    End With
+
+    ' Extraire le mois et l'année à partir du nom du fichier source
+    moisComplet = ExtraireMoisDuNom(fichierSource)
+    annee = ExtraireAnneeDuNom(fichierSource)
+
+    If moisComplet = "" Then
+        MsgBox "Le mois n'a pas pu être extrait du nom du fichier source.", vbExclamation
+        Exit Sub ' Si le mois ne peut être extrait, quitter la procédure
+    End If
+
+    ' Sélectionner le fichier de destination via un dialogue de fichiers
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = "Sélectionnez le fichier de destination"
+        .Filters.Clear
+        If .Show = -1 Then
+            fichierDestination = .SelectedItems(1) ' Récupère le chemin du fichier sélectionné
+        Else
+            MsgBox "Aucun fichier de destination sélectionné.", vbExclamation
+            Exit Sub ' Si aucun fichier n'est sélectionné, quitter la procédure
+        End If
+    End With
+
+    ' Ouvrir les fichiers source et destination
+    Set wbSource = Workbooks.Open(fichierSource)
+    Set wbDestination = Workbooks.Open(fichierDestination)
+
+    ' Récupérer la première feuille du fichier source
+    Set wsSource = wbSource.Sheets(1)
+
+    ' Créer ou vérifier les feuilles de destination en fonction du mois et de l'année
+    Set wsDestinationEntrants = CreerOuVerifierFeuille(wbDestination, "Entrants", moisComplet, annee)
+    Set wsDestinationSortants = CreerOuVerifierFeuille(wbDestination, "Sortants", moisComplet, annee)
+
+    ' Initialiser les cellules des feuilles Entrants et Sortants (les remplir avec des zéros)
+    InitialiserCellules wsDestinationEntrants
+    InitialiserCellules wsDestinationSortants
+
+    ' Copier les données depuis la source vers les feuilles Entrants et Sortants
+    CopierVersFeuille wsSource, wsDestinationEntrants, "Entrants"
+    CopierVersFeuille wsSource, wsDestinationSortants, "Sortants"
+
+    ' Copier les données internationales (pour Entrants et Sortants)
+    CopierInternational wsSource, wsDestinationEntrants, "Entrants"
+    CopierInternational wsSource, wsDestinationSortants, "Sortants"
+
+    ' Sauvegarder et fermer les fichiers source et destination
+    wbDestination.Save
+    wbDestination.Close
+    wbSource.Close
+    MsgBox "Traitement terminé avec succès !", vbInformation ' Message de fin de traitement
+End Sub
+
+' Fonction pour extraire le mois à partir du nom du fichier (avec une expression régulière)
+Function ExtraireMoisDuNom(fichierSource As String) As String
+    Dim regex As Object, mois As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "(Janvier|Février|Mars|Avril|Mai|Juin|Juillet|Août|Septembre|Octobre|Novembre|Décembre)"
+    If regex.Test(fichierSource) Then
+        mois = regex.Execute(fichierSource)(0) ' Si un mois est trouvé, l'extrait
+    Else
+        mois = "" ' Sinon, retourne une chaîne vide
+    End If
+    ExtraireMoisDuNom = mois
+End Function
+
+' Fonction pour extraire l'année à partir du nom du fichier (avec une expression régulière)
+Function ExtraireAnneeDuNom(fichierSource As String) As String
+    Dim regex As Object, annee As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "\d{4}" ' Recherche un nombre de 4 chiffres (l'année)
+    If regex.Test(fichierSource) Then
+        annee = regex.Execute(fichierSource)(0) ' Si une année est trouvée, l'extrait
+    Else
+        annee = "" ' Sinon, retourne une chaîne vide
+    End If
+    ExtraireAnneeDuNom = annee
+End Function
+
+' Fonction pour créer ou vérifier l'existence d'une feuille de travail avec un nom spécifique
+Function CreerOuVerifierFeuille(wb As Workbook, prefixe As String, mois As String, annee As String) As Worksheet
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = wb.Sheets(prefixe & "_" & mois & "_" & annee) ' Tente de récupérer la feuille avec ce nom
+    If ws Is Nothing Then
+        ' Si la feuille n'existe pas, crée une nouvelle feuille
+        Set ws = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
+        ws.Name = prefixe & "_" & mois & "_" & annee
+    End If
+    On Error GoTo 0 ' Restaure la gestion normale des erreurs
+    Set CreerOuVerifierFeuille = ws ' Retourne la feuille créée ou existante
+End Function
+
+    'POUR COPIER PREPAID POSTPAID
+'POSTPAID    ONATEL-NATIONAL
+wsSource.Cells(9, 5).Copy wsDestination.Cells(16, 2)
+wsSource.Cells(9, 6).Copy wsDestination.Cells(16, 3)
+wsSource.Cells(9, 7).Copy wsDestination.Cells(16, 5)
+'POSTPAID ONATEL-OUAGA
+wsSource.Cells(10, 5).Copy wsDestination.Cells(15, 2)
+wsSource.Cells(10, 6).Copy wsDestination.Cells(15, 3)
+wsSource.Cells(10, 7).Copy wsDestination.Cells(15, 5)
+'POSTPAID OrangeBF
+wsSource.Cells(11, 5).Copy wsDestination.Cells(12, 2)
+wsSource.Cells(11, 6).Copy wsDestination.Cells(12, 3)
+wsSource.Cells(11, 7).Copy wsDestination.Cells(12, 5)
+'POSTPAID TELMOB
+wsSource.Cells(12, 5).Copy wsDestination.Cells(13, 2)
+wsSource.Cells(12, 6).Copy wsDestination23.Cells(13, 3)
+wsSource.Cells(12, 7).Copy wsDestination.Cells(13, 5)
+
+
+'PREPAID ONATEL - NATIONAL
+wsSource.Cells(3, 5).Copy wsDestination.Cells(8, 2)
+wsSource.Cells(3, 6).Copy wsDestination.Cells(8, 3)
+wsSource.Cells(3, 7).Copy wsDestination.Cells(8, 5)
+'PREPAID ONATEL - OUAGA
+wsSource.Cells(4, 5).Copy wsDestination.Cells(7, 2)
+wsSource.Cells(4, 6).Copy wsDestination.Cells(7, 3)
+wsSource.Cells(4, 7).Copy wsDestination.Cells(7, 5)
+'PREPAID VAS ET VERTS
+wsSource.Cells(5, 5).Copy wsDestination.Cells(9, 2)
+wsSource.Cells(5, 6).Copy wsDestination.Cells(9, 3)
+wsSource.Cells(5, 7).Copy wsDestination.Cells(9, 5)
+'PREPAID OrangeBF
+wsSource.Cells(6, 5).Copy wsDestination.Cells(4, 2)
+wsSource.Cells(6, 6).Copy wsDestination.Cells(4, 3)
+wsSource.Cells(6, 7).Copy wsDestination.Cells(4, 5)
+'PREPAID TELMOB
+wsSource.Cells(7, 5).Copy wsDestination.Cells(5, 2)
+wsSource.Cells(7, 6).Copy wsDestination.Cells(5, 3)
+wsSource.Cells(7, 7).Copy wsDestination.Cells(5, 5)
+
+' Fonction pour copier des données internationales dans les feuilles de destination
+Sub CopierInternational(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    Dim i As Integer, p As Integer
+    ' Parcours les lignes 14 à 24 de la source pour les données internationales
+    
+          ' POUR COPIER INTERNATIONAL
+For i = 14 To 24
+    For p = 23 To 38
+    If wsSource.Cells(i, 2) = wsDestination.Cells(p, 1) Then
+    'Copier le total vers CA
+    wsSource.Cells(i, 15).Copy wsDestination.Cells(p, 10)
+    'Copier Normal
+    wsSource.Cells(i, 5).Copy wsDestination.Cells(p, 2)
+    wsSource.Cells(i, 6).Copy wsDestination.Cells(p, 3)
+    'Remplissage tarif normal
+    If wsSource.Cells(i, 5) <> 0 Then
+    x = wsSource.Cells(i, 6).Value
+    y = wsSource.Cells(i, 5).Value
+    z = x / y
+    wsSource.Cells(p, 8).Value = z
+    End If
+    'Copier transit
+    wsSource.Cells(i, 8).Copy wsDestination.Cells(p, 4)
+   wsSource.Cells(i, 9).Copy wsDestination.Cells(p, 5)
+    'Copier Roaming
+    wsSource.Cells(i, 12).Copy wsDestination.Cells(p, 6)
+    wsSource.Cells(i, 13).Copy wsDestination.Cells(p, 7)
+    End If
+    Next p
+Next i
+    
+    
+End Sub
+
+' Fonction pour initialiser les cellules des feuilles de destination (mettre des zéros)
+Sub InitialiserCellules(ws As Worksheet)
+    Dim i As Integer
+    For i = 2 To 10
+        ws.Cells(i, 1).Value = 0 ' Initialiser la colonne 1
+        ws.Cells(i, 2).Value = 0 ' Initialiser la colonne 2
+        ws.Cells(i, 3).Value = 0 ' Initialiser la colonne 3
+        ws.Cells(i, 4).Value = 0 ' Initialiser la colonne 4
+    Next i
+End Sub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Sub TraitementDesDonnees()
+    Dim fichierSource As String, fichierDestination As String
+    Dim wbSource As Workbook, wbDestination As Workbook
+    Dim wsSource As Worksheet, wsDestinationEntrants As Worksheet, wsDestinationSortants As Worksheet
+    Dim plageSourceEntrants As Range, plageSourceSortants As Range
+    Dim moisComplet As String, annee As String
+
+    ' Sélectionner le fichier source
+    fichierSource = ChoisirFichier("Sélectionnez le fichier source")
+    If fichierSource = "" Then Exit Sub
+
+    ' Récupérer le mois et l'année à partir du nom du fichier source
+    moisComplet = ExtraireMoisDuNom(fichierSource)
+    annee = ExtraireAnneeDuNom(fichierSource)
+
+    If moisComplet = "" Then
+        MsgBox "Le mois n'a pas pu être extrait du nom du fichier source.", vbExclamation
+        Exit Sub
+    End If
+
+    
+    ' Sélectionner le fichier de destination
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = "Sélectionnez le fichier de destination"
+        .Filters.Clear
+        If .Show = -1 Then
+            fichierDestination = .SelectedItems(1)
+        Else
+            MsgBox "Aucun fichier de destination sélectionné.", vbExclamation
+            Exit Sub
+        End If
+    End With
+
+    ' Ouvrir les fichiers source et destination
+    On Error Resume Next
+    Set wbSource = Workbooks.Open(fichierSource) ' Essayer d'ouvrir le fichier source
+    If wbSource Is Nothing Then
+        MsgBox "Erreur en ouvrant le fichier source.", vbExclamation
+        Exit Sub
+    End If
+    Set wbDestination = Workbooks.Open(fichierDestination) ' Essayer d'ouvrir le fichier destination
+    If wbDestination Is Nothing Then
+        MsgBox "Erreur en ouvrant le fichier de destination.", vbExclamation
+        Exit Sub
+    End If
+    On Error GoTo 0 ' Réinitialiser le traitement d'erreur
+
+    ' Créer ou vérifier les feuilles de destination en fonction du mois et de l'année
+    Set wsDestinationEntrants = CreerFeuilleSiInexistante(wbDestination, "Entrants_" & moisComplet & IIf(annee <> "", "_" & annee, ""))
+    Set wsDestinationSortants = CreerFeuilleSiInexistante(wbDestination, "Sortants_" & moisComplet & IIf(annee <> "", "_" & annee, ""))
+
+    ' Récupérer les plages sources pour Entrants et Sortants
+    Set wsSource = wbSource.Sheets(1)
+    Set plageSourceEntrants = wsSource.Range("F7:O30")
+    Set plageSourceSortants = wsSource.Range("P7:X30")
+
+    ' Copier les données vers les feuilles de destination
+    CopierVersFeuille wsSource, wsDestinationEntrants, plageSourceEntrants, "Entrants_" & moisComplet
+    CopierVersFeuille wsSource, wsDestinationSortants, plageSourceSortants, "Sortants_" & moisComplet
+
+    ' Fermer les classeurs
+    wbDestination.Save
+    wbDestination.Close
+    wbSource.Close
+
+    MsgBox "Traitement terminé avec succès !", vbInformation
+    
+    ' Structurer les en-têtes pour Entrants
+    With wsDestinationEntrants
+    .Range("A1").Value = "STATISTIQUES TELECEL FASO"
+     .Range("A2").Value = "INCOMMING TRAFFIC PREPAID"
+       .Range("A4").Value = "Mobile from OrangeBF"
+       .Range("A5").Value = "Mobile from TELMOB"
+       .Range("A6").Value = " Mobile from other networks"
+       
+       .Range("A7").Value = "Fixe from onatel ouaga"
+       .Range("A8").Value = "Fixe from onatel national "
+       .Range("A9").Value = "VAS & Verts"
+       .Range("A10").Value = "Fixe to Mobile"
+       .Range("A11").Value = "INCOMMING TRAFFIC POSTPAID"
+       
+       .Range("A12").Value = "Mobile from OrangeBF"
+       
+       .Range("A13").Value = "Mobile from TELMOB"
+       .Range("A14").Value = " Mobile from other networks"
+       
+       .Range("A15").Value = "Fixe from onatel ouaga"
+       .Range("A16").Value = "Fixe from onatel national "
+    
+       .Range("A17").Value = "Fixe to Mobile"
+       
+        .Range("B3").Value = "Nb d'appels"
+        .Range("C3").Value = "NB mn"
+        .Range("D3").Value = "Coût Minute"
+        ' Plus d'en-têtes selon l'exemple que vous souhaitez
+        .Range("E3").Value = "CA"  ' Exemple de colonne supplémentaire
+     
+        ' Formater les en-têtes
+        .Range("A1:D1").Font.Bold = True
+        .Range("A1:D1").Interior.Color = RGB(255, 255, 0) ' Jaune
+    End With
+
+    ' Structurer les en-têtes pour Sortants
+    With wsDestinationSortants
+        .Range("A1").Value = "Nb d'appels"
+        .Range("B1").Value = "Minutes"
+        .Range("C1").Value = "Montant"
+        ' Plus d'en-têtes selon l'exemple que vous souhaitez
+        .Range("D1").Value = "Autres Infos"  ' Exemple de colonne supplémentaire
+
+        ' Formater les en-têtes
+        .Range("A1:D1").Font.Bold = True
+        .Range("A1:D1").Interior.Color = RGB(255, 255, 0) ' Jaune
+    End With
+
+End Sub
+
+Function ChoisirFichier(titre As String) As String
+    With Application.FileDialog(msoFileDialogFilePicker)
+        .Title = titre
+        .Filters.Clear
+        .Filters.Add "Fichiers Excel", "*.xls; *.xlsx; *.xlsm" ' Filtrer pour les fichiers Excel
+        .AllowMultiSelect = False ' Ne permet pas la sélection de plusieurs fichiers
+        If .Show = -1 Then ' Vérifier si un fichier a été sélectionné
+            ChoisirFichier = .SelectedItems(1) ' Renvoie le chemin du fichier sélectionné
+        Else
+            ChoisirFichier = "" ' Aucune sélection faite
+        End If
+    End With
+End Function
+
+Function CreerFeuilleSiInexistante(wb As Workbook, nomDeFeuille As String) As Worksheet
+    Dim feuille As Worksheet
+    On Error Resume Next
+    Set CreerFeuilleSiInexistante = wb.Sheets(nomDeFeuille)
+    On Error GoTo 0
+
+    If CreerFeuilleSiInexistante Is Nothing Then
+        Set feuille = wb.Sheets.Add(After:=wb.Sheets(wb.Sheets.Count))
+        feuille.Name = nomDeFeuille
+    End If
+End Function
+
+Sub CopierVersFeuille(wsSource As Worksheet, wsDestination As Worksheet, plageSource As Range, nomDeFeuille As String)
+    Dim plageDestination As Range
+    Set plageDestination = wsDestination.Range(plageSource.Address)
+
+    plageSource.Copy
+    plageDestination.PasteSpecial Paste:=xlPasteValues ' Colle les valeurs uniquement
+End Sub
+
+Function ExtraireMoisDuNom(fichier As String) As String
+    Dim regex As Object, mois As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "(Janvier|Février|Mars|Avril|Mai|Juin|Juillet|Août|Septembre|Octobre|Novembre|Décembre)"
+
+    If regex.Test(fichier) Then
+        mois = regex.Execute(fichier)(0) ' L'extrait si un mois est trouvé
+    Else
+        mois = "" ' Sinon, retourne une chaîne vide
+    End If
+
+    ExtraireMoisDuNom = mois
+End Function
+
+Function ExtraireAnneeDuNom(fichier As String) As String
+    Dim regex As Object, annee As String
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.IgnoreCase = True
+    regex.Global = True
+    regex.Pattern = "\d{4}" ' Recherche un nombre de 4 chiffres (l'année)
+
+    If regex.Test(fichier) Then
+        annee = regex.Execute(fichier)(0) ' L'extrait si une année est trouvée
+    Else
+        annee = "" ' Sinon, retourne une chaîne vide
+    End If
+
+    ExtraireAnneeDuNom = annee
+End Function
+
+
+
+Sub CopierDonneesEtInternational(wsSource As Worksheet, wsDestination As Worksheet, plageSource As Range, feuilleType As String)
+    Dim i As Integer, p As Integer
+
+    ' Copier les données de la plage source vers la feuille de destination
+    For i = 1 To plageSource.Rows.Count
+        For p = 4 To 17
+            ' Vérifier si la cellule correspond
+            If plageSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                ' Copier les valeurs générales
+                CopierValeurs wsDestination, plageSource, i, p, feuilleType
+
+                ' Copier les données PREPAID et POSTPAID (en fonction de la feuille type)
+                CopierPrePostPaid wsSource, wsDestination, feuilleType
+
+                ' Copier les données INTERNATIONAL (en fonction de la feuille type)
+                CopierInternational wsSource, wsDestination, feuilleType
+            End If
+        Next p
+    Next i
+End Sub
+
+Sub CopierPrePostPaid(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    If feuilleType = "Entrants" Then
+        ' POSTPAID
+        wsSource.Cells(9, 16).Copy wsDestination.Cells(16, 2) ' ONATEL-NATIONAL
+        wsSource.Cells(9, 17).Copy wsDestination.Cells(16, 3)
+        wsSource.Cells(9, 18).Copy wsDestination.Cells(16, 5)
+
+        wsSource.Cells(10, 16).Copy wsDestination.Cells(15, 2) ' ONATEL-OUAGA
+        wsSource.Cells(10, 17).Copy wsDestination.Cells(15, 3)
+        wsSource.Cells(10, 18).Copy wsDestination.Cells(15, 5)
+
+        wsSource.Cells(11, 16).Copy wsDestination.Cells(12, 2) ' OrangeBF
+        wsSource.Cells(11, 17).Copy wsDestination.Cells(12, 3)
+        wsSource.Cells(11, 18).Copy wsDestination.Cells(12, 5)
+
+        wsSource.Cells(12, 16).Copy wsDestination.Cells(13, 2) ' TELMOB
+        wsSource.Cells(12, 17).Copy wsDestination.Cells(13, 3)
+        wsSource.Cells(12, 18).Copy wsDestination.Cells(13, 5)
+
+        ' PREPAID
+        wsSource.Cells(3, 16).Copy wsDestination.Cells(8, 2) ' ONATEL-NATIONAL
+        wsSource.Cells(3, 17).Copy wsDestination.Cells(8, 3)
+        wsSource.Cells(3, 18).Copy wsDestination.Cells(8, 5)
+
+        wsSource.Cells(4, 16).Copy wsDestination.Cells(7, 2) ' ONATEL-OUAGA
+        wsSource.Cells(4, 17).Copy wsDestination.Cells(7, 3)
+        wsSource.Cells(4, 18).Copy wsDestination.Cells(7, 5)
+
+        wsSource.Cells(5, 16).Copy wsDestination.Cells(9, 2) ' VAS ET VERTS
+        wsSource.Cells(5, 17).Copy wsDestination.Cells(9, 3)
+        wsSource.Cells(5, 18).Copy wsDestination.Cells(9, 5)
+
+        wsSource.Cells(6, 16).Copy wsDestination.Cells(4, 2) ' OrangeBF
+        wsSource.Cells(6, 17).Copy wsDestination.Cells(4, 3)
+        wsSource.Cells(6, 18).Copy wsDestination.Cells(4, 5)
+
+        wsSource.Cells(7, 16).Copy wsDestination.Cells(5, 2) ' TELMOB
+        wsSource.Cells(7, 17).Copy wsDestination.Cells(5, 3)
+        wsSource.Cells(7, 18).Copy wsDestination.Cells(5, 5)
+    ElseIf feuilleType = "Sortants" Then
+        ' POSTPAID
+        wsSource.Cells(9, 5).Copy wsDestination.Cells(16, 2) ' ONATEL-NATIONAL
+        wsSource.Cells(9, 6).Copy wsDestination.Cells(16, 3)
+        wsSource.Cells(9, 7).Copy wsDestination.Cells(16, 5)
+
+        wsSource.Cells(10, 5).Copy wsDestination.Cells(15, 2) ' ONATEL-OUAGA
+        wsSource.Cells(10, 6).Copy wsDestination.Cells(15, 3)
+        wsSource.Cells(10, 7).Copy wsDestination.Cells(15, 5)
+
+        wsSource.Cells(11, 5).Copy wsDestination.Cells(12, 2) ' OrangeBF
+        wsSource.Cells(11, 6).Copy wsDestination.Cells(12, 3)
+        wsSource.Cells(11, 7).Copy wsDestination.Cells(12, 5)
+
+        wsSource.Cells(12, 5).Copy wsDestination.Cells(13, 2) ' TELMOB
+        wsSource.Cells(12, 6).Copy wsDestination.Cells(13, 3)
+        wsSource.Cells(12, 7).Copy wsDestination.Cells(13, 5)
+
+        ' PREPAID
+        wsSource.Cells(3, 5).Copy wsDestination.Cells(8, 2) ' ONATEL-NATIONAL
+        wsSource.Cells(3, 6).Copy wsDestination.Cells(8, 3)
+        wsSource.Cells(3, 7).Copy wsDestination.Cells(8, 5)
+
+        wsSource.Cells(4, 5).Copy wsDestination.Cells(7, 2) ' ONATEL-OUAGA
+        wsSource.Cells(4, 6).Copy wsDestination.Cells(7, 3)
+        wsSource.Cells(4, 7).Copy wsDestination.Cells(7, 5)
+
+        wsSource.Cells(5, 5).Copy wsDestination.Cells(9, 2) ' VAS ET VERTS
+        wsSource.Cells(5, 6).Copy wsDestination.Cells(9, 3)
+        wsSource.Cells(5, 7).Copy wsDestination.Cells(9, 5)
+
+        wsSource.Cells(6, 5).Copy wsDestination.Cells(4, 2) ' OrangeBF
+        wsSource.Cells(6, 6).Copy wsDestination.Cells(4, 3)
+        wsSource.Cells(6, 7).Copy wsDestination.Cells(4, 5)
+
+        wsSource.Cells(7, 5).Copy wsDestination.Cells(5, 2) ' TELMOB
+        wsSource.Cells(7, 6).Copy wsDestination.Cells(5, 3)
+        wsSource.Cells(7, 7).Copy wsDestination.Cells(5, 5)
+    End If
+End Sub
+
+Sub CopierInternational(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    Dim i As Integer, p As Integer
+
+    If feuilleType = "Entrants" Then
+        ' Copier les données internationales pour les entrants
+        For i = 14 To 24
+            For p = 23 To 38
+                If wsSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                    ' Copier le total vers CA
+                    wsDestination.Cells(p, 10).Value = wsSource.Cells(i, 15).Value
+                    ' Copier Normal
+                    wsDestination.Cells(p, 2).Value = wsSource.Cells(i, 5).Value
+                    wsDestination.Cells(p, 3).Value = wsSource.Cells(i, 6).Value
+                    ' Remplissage tarif normal
+                    If wsSource.Cells(i, 5).Value <> 0 Then
+                        Dim x As Double, y As Double, z As Double
+                        x = wsSource.Cells(i, 6).Value
+                        y = wsSource.Cells(i, 5).Value
+                        z = x / y
+                        wsDestination.Cells(p, 8).Value = z
+                    End If
+                    ' Copier Transit
+                    wsDestination.Cells(p, 4).Value = wsSource.Cells(i, 8).Value
+                    wsDestination.Cells(p, 5).Value = wsSource.Cells(i, 9).Value
+                    ' Copier Roaming
+                    wsDestination.Cells(p, 6).Value = wsSource.Cells(i, 12).Value
+                    wsDestination.Cells(p, 7).Value = wsSource.Cells(i, 13).Value
+                End If
+            Next p
+        Next i
+    End If
+
+    If feuilleType = "Sortants" Then
+        ' Copier les données internationales pour les sortants
+        For i = 14 To 24
+            For p = 23 To 38
+                If wsSource.Cells(i, 2).Value = wsDestination.Cells(p, 1).Value Then
+                    ' Copier Normal
+                    wsDestination.Cells(p, 2).Value = wsSource.Cells(i, 16).Value
+                    wsDestination.Cells(p, 3).Value = wsSource.Cells(i, 17).Value
+                    wsDestination.Cells(p, 4).Value = wsSource.Cells(i, 18).Value
+                    ' Copier Roaming
+                    wsDestination.Cells(p, 5).Value = wsSource.Cells(i, 22).Value
+                    wsDestination.Cells(p, 6).Value = wsSource.Cells(i, 23).Value
+                    wsDestination.Cells(p, 7).Value = wsSource.Cells(i, 24).Value
+                    ' Copier Transit
+                    wsDestination.Cells(p, 8).Value = wsSource.Cells(i, 19).Value
+                    wsDestination.Cells(p, 9).Value = wsSource.Cells(i, 20).Value
+                    wsDestination.Cells(p, 10).Value = wsSource.Cells(i, 21).Value
+                End If
+            Next p
+        Next i
+    End If
+End Sub
+Sub VerifierChiffres(wsSource As Worksheet, wsDestination As Worksheet, feuilleType As String)
+    Dim totalPrepaid As Double, totalPostpaid As Double
+
+    If feuilleType = "Entrants" Then
+        ' Calcul des totaux pour PREPAID
+        totalPrepaid = wsDestination.Cells(8, 2).Value + wsDestination.Cells(8, 3).Value + wsDestination.Cells(8, 5).Value + _
+                       wsDestination.Cells(12, 2).Value wsDestination.Cells(12, 3).Value + wsDestination.Cells(12, 5).Value
+        wsSource.Cells(26, 2).Value = totalPrepaid
+
+        ' Calcul des totaux pour POSTPAID
+        totalPostpaid = wsDestination.Cells(13, 2).Value + wsDestination.Cells(13, 3).Value + wsDestination.Cells(13, 5).Value + _
+                        wsDestination.Cells(16, 2).Value wsDestination.Cells(16, 3).Value + wsDestination.Cells(16, 5).Value
+        wsSource.Cells(27, 2).Value = totalPostpaid
+    ElseIf feuilleType = "Sortants" Then
+        ' Calcul des totaux pour PREPAID
+        totalPrepaid = wsDestination.Cells(8, 2).Value + wsDestination.Cells(8, 3).Value + wsDestination.Cells(8, 5).Value + _
+                       wsDestination.Cells(12, 2).Value wsDestination.Cells(12, 3).Value + wsDestination.Cells(12, 5).Value
+        wsSource.Cells(26, 2).Value = totalPrepaid
+
+        ' Calcul des totaux pour POSTPAID
+        totalPostpaid = wsDestination.Cells(13, 2).Value + wsDestination.Cells(13, 3).Value + wsDestination.Cells(13, 5).Value + _
+                        wsDestination.Cells(16, 2).Value wsDestination.Cells(16, 3).Value + wsDestination.Cells(16, 5).Value
+        wsSource.Cells(27, 2).Value = totalPostpaid
+    End If
+
+    ' Message de confirmation
+    MsgBox "Vérification des totaux terminée pour " & feuilleType & ".", vbInformation
+End Sub
+
+
+
+
+
+Sub InitialiserCellulesEntrees(ws As Worksheet, feuilleType As String)
+    If feuilleType = "Entrants" Then
+        ' Initialisation pour "Entrants"
+        Dim p As Integer
+        Dim lignes() As Variant
+        lignes = Array(16, 15, 12, 13, 8, 7, 9, 4, 5)
+
+        ' Initialiser les plages principales pour les Entrants
+        For p = 23 To 38
+            ws.Cells(p, 10).Value = 0 ' Total CA
+            ws.Cells(p, 2).Value = 0  ' Normal 1
+            ws.Cells(p, 3).Value = 0  ' Normal 2
+            ws.Cells(p, 4).Value = 0  ' Transit 1
+            ws.Cells(p, 5).Value = 0  ' Transit 2
+            ws.Cells(p, 6).Value = 0  ' Roaming 1
+            ws.Cells(p, 7).Value = 0  ' Roaming 2
+        Next p
+
+        ' Initialisation pour Prepaid et Postpaid
+        For p = 4 To 17
+            ws.Cells(16, 2).Value = 0 ' POSTPAID ONATEL-NATIONAL
+            ws.Cells(16, 3).Value = 0
+            ws.Cells(16, 5).Value = 0
+            ws.Cells(15, 2).Value = 0 ' POSTPAID ONATEL-OUAGA
+            ws.Cells(15, 3).Value = 0
+            ws.Cells(15, 5).Value = 0
+            ws.Cells(12, 2).Value = 0 ' POSTPAID OrangeBF
+            ws.Cells(12, 3).Value = 0
+            ws.Cells(12, 5).Value = 0
+            ws.Cells(13, 2).Value = 0 ' POSTPAID TELMOB
+            ws.Cells(13, 3).Value = 0
+            ws.Cells(13, 5).Value = 0
+            ws.Cells(8, 2).Value = 0  ' PREPAID ONATEL-NATIONAL
+            ws.Cells(8, 3).Value = 0
+            ws.Cells(8, 5).Value = 0
+            ws.Cells(7, 2).Value = 0  ' PREPAID ONATEL-OUAGA
+            ws.Cells(7, 3).Value = 0
+            ws.Cells(7, 5).Value = 0
+            ws.Cells(9, 2).Value = 0  ' PREPAID VAS ET VERTS
+            ws.Cells(9, 3).Value = 0
+            ws.Cells(9, 5).Value = 0
+            ws.Cells(4, 2).Value = 0  ' PREPAID OrangeBF
+            ws.Cells(4, 3).Value = 0
+            ws.Cells(4, 5).Value = 0
+            ws.Cells(5, 2).Value = 0  ' PREPAID TELMOB
+            ws.Cells(5, 3).Value = 0
+            ws.Cells(5, 5).Value = 0
+        Next p
+
+        ' Initialiser les lignes spécifiques
+        Dim i As Integer
+        For i = LBound(lignes) To UBound(lignes)
+            ws.Cells(lignes(i), 2).Value = 0
+            ws.Cells(lignes(i), 3).Value = 0
+            ws.Cells(lignes(i), 5).Value = 0
+        Next i
+
+    ElseIf feuilleType = "Sortants" Then
+        ' Initialisation pour "Sortants"
+        MsgBox "Logique pour la feuille 'Sortants' à ajouter ici"
+    End If
+End Sub
+
+
+
+

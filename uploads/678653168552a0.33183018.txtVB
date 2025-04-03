@@ -1,0 +1,153 @@
+Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\Desktop\soutenance\my_blog\blog\views.py", line 8, in home
+    return render(request, "index.html", context)       
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\shortcuts.py", line 24, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader.py", 
+line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 175, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 157, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\loader_tags.py", line 208, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 177, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 167, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\defaulttags.py", line 321, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 1005, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\base.py", line 966, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\template\defaulttags.py", line 471, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ebou2023\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\urls\resolvers.py", line 828, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'login-blog' not found. 'login-blog' is not a valid view function or pattern name.
+[21/Aug/2023 16:03:06] "GET / HTTP/1.1" 500 199456
+Not Found: /favicon.ico
+[21/Aug/2023 16:03:07,277] - Broken pipe from ('127.0.0.1', 57452)
+
+
+
+
+
+
+
+
+
+
+
+
+{ le  classeur TRAFIC_PAR_OPERATEURS qui contient les cathegorie(B7),destination(C7) ,entrant et sortant des operateurs  dans la colum de cathegorie(son contenu est de B9 a B30)(prepaid,pospaid,all) devant la colum de cathegorie on a la colum de destination son contenu est de C9 à C30 qui contient(( ONATEL-NATIONAL(C9),ONATEL-OUAGA(C10),ONATEL-VAS&VERTS(C11),OrangeBF(C12),TELMOB(C13),Total(C14)}pour les prepaid ,(ONATEL-NATIONAL(C15),ONATEL-OUAGA(C16),OrangeBF(C17),TELMOB(C18),Total(C19))pour les pospaid,(ATEL MALI(C20),BICS(C21),GATEWAY(C22),MTN RCI(C23),ORANGE CI(C24),ORANGEBF(C25),PSTN(C26),TELMOB(C27),TOGO CELLULAIRE(C28),VUETEL(C29),Total(C30))pour all) devant la colum de destination on a les [colum de entrant(F7)son contenu(NB(F8 son contenu est de F9 à F29 et F30 est le total de son conteu), Minutes(G8 son contenu est de G9 à G29 et G30 est le total de son conteu),Montant(H8 son contenu est de H9 à H29 et H30 est le total de son conteu),NB Transit(I8 son contenu est de I9 à I29 et I30 est le total de son conteu),Minutes Transit(J8 son contenu est de J9 à J29 et J30 est le total de son conteu),Montant Transit(L8 son contenu est de L9 à L29 et L30 est le total de son conteu),NB Roaming(M8 son contenu est de M9 à M29 et M30 est le total de son conteu),Minutes Roaming(N8 son contenu est de N9 à N29 et N30 est le total de son conteu),Montant Roaming(O8 son contenu est de O9 à O29 et O30 est le total de son conteu))] et [sortants(P7) son contenu est(NB(P8 son contenu est de P9 à P29 et P30 est le total de son conteu), Minutes(Q8 son contenu est de Q9 à Q29 et Q30 est le total de son conteu),Montant(R8 son contenu est de R9 à R29 et R30 est le total de son conteu),NB Transit(S8 son contenu est de S9 à S29 et S30 est le total de son conteu),Minutes Transit(T8 son contenu est de T9 à T29 et T30 est le total de son conteu),Montant Transit(U8 son contenu est de U9 à U29 et U30 est le total de son conteu),NB Roaming(V8 son contenu est de V9 à V29 et V30 est le total de son conteu),Minutes Roaming(W8 son contenu est de W9 à W29 et W30 est le total de son conteu),Montant Roaming(F8 son contenu est de X9 à X29 et X30 est le total de son conteu)])effectuer par chaque operateur la synthesetrafic pour un mois .qui doit etre remplir automatiquement dans le classeur Trafic ParOperateur_BOC qui contient les feilles entrant et sortants pour chaque mois et chaque annee dans la feuille entrants pour chaque mois et chaque annee on a le STATISTIQUES TELECEL FASO(A1) [[(INCOMMING TRAFFIC PREPAID(A2) qui contient ( NB appels(B3 son contenu est de B4 à B17 prive de B11),NB mn(C3 son contenu est de C4 à C17 prive de C11),Coût Minute(D3 son contenu est de D4 à D17 prive de D11),CA(E3 son contenu est de E4 à E17 prive de E11))effectuer par(Mobile from OrangeBF(A4),Mobile from TELMOB(A5), Mobile from other networks(A6),Fixe from onatel ouaga(A7),Fixe from onatel national(A8) ,VAS & Verts(A9),Fixe to Mobile(A10)) TOTAL Produits Local du mois qui est la somme de ca qui est E19, NB moyen
+ min par jour(L3 son contenu est de L4 à L17 priver de L11)  cette formul qui sert a calculer son contenu qui est de L4 à L17 =SIERREUR(C4/$K$1;0))qui est NB mn et NB Jours pour chaque mois, et VariationM/M-1(M3 son conten est de M4 à M17 priver de M11)=SIERREUR((L4-Entrants_Decembre_2020!L4)/Entrants_Decembre_2020!L4;0)la formul sert a calculer son contenu de M4 à M17) , Net Balance(R3 son contenu est de R4 à R17 prive de R11 )=E4-Sortants_Janvier!E4 cette fomule sert a calculer son contenu de R4 à R17 , CA Annuel(S3 son contenu est de S4 à S17 priver de S11)=E4 pour CALCULER de S4 a S17 et TOTAL Produits
+Local depuis Janv(R19)=S6+S10+S14+S17 qui sert a calculer S19 .,Paiement(T3 son contenu est de T4 à T17 priver de T11),Date(U3 son contenu est de U4 à U17 priver  de U11),Cumul an(V3 son conteu est  V4 à V17 priver de V11)=R4+T4 pour calculer son contenu de V4 à V17 et Netting local depuis 
+Janv(U19)=V6+V10+V14+V17 pour claculer le contenu de V19.,], [(INCOMMING TRAFFIC PosPAID(A11) qui contient ( NB appels(B3 son contenu est de B4 à B17 prive de B11),NB mn(C3 son contenu est de C4 à C17 prive de C11),Coût Minute(D3 son contenu est de D4 à D17 prive de D11),CA(E3 son contenu est de E4 à E17 prive de E11)) , TOTAL Produits Local du mois qui est la somme de ca qui est E19, NB moyen
+ min par jour(L3 son contenu est de L4 à L17 priver de L11)  cette formul qui sert a calculer son contenu qui est de L4 à L17 =SIERREUR(C4/$K$1;0))qui est NB mn et NB Jours pour chaque mois, et VariationM/M-1(M3 son conten est de M4 à M17 priver de M11)=SIERREUR((L4-Entrants_Decembre_2020!L4)/Entrants_Decembre_2020!L4;0)la formul sert a calculer son contenu de M4 à M17), Net Balance(R3 son contenu est de R4 à R17 prive de R11 )=E4-Sortants_Janvier!E4 cette fomule sert a calculer son contenu de R4 à R17 , CA Annuel(S3 son contenu est de S4 à S17 priver de S11)=E4 POUR CALCULER de S4 a S17 et TOTAL Produits
+Local depuis Janv(R19)=S6+S10+S14+S17 qui sert a calculer S19 .,Paiement(T3 son contenu est de T4 à T17 priver de T11),Date(U3 son contenu est de U4 à U17 priver  de U11),Cumul an(V3 son conteu est  V4 à V17 priver de V11)=R4+T4 pour calculer son contenu de V4 à V17 et Netting local depuis 
+Janv(U19)=V6+V10+V14+V17 pour claculer le contenu de V19., pour les appels effectuer par ses operateurs (Mobile from OrangeBF(A12),Mobile from TELMOB(A13), Mobile from other networks(A14),Fixe from onatel ouaga(A15),Fixe from onatel national(A16) ,Fixe to Mobile(A17)] ,NB Jours(J1)=31(K1)   ,[INCOMMING TRAFFIC INTERNATIONAL(A21) qui contient(NORMAL(B22 son contenu est de B23 à B38 et le total de son contenu es B39),TRANSIT(D22 son contenu est de D23 à D38 et le total de son contenu es D39),Roaming(F22 son contenu est de D23 à D38 et le total de son contenu es D39))effectue par(PSTN(A23),VUTEL(A24),GATEWAY(A25),TINTEL(A26),TATA(A27),OrangeBF(28),TELMOB(A29),TOGO CELLULAIRE(A30),ORANGE CI(A31),ORANGE MALI(A32),MTN CI(A33),ARCEP(A34),BICS(A35),ATEL MALI(A36),AIRTEL INT(A37),TELECEL GLOBAL(A38),TOTAL(A39)), Coût Minute(H21)(Normal(H22 son contenu est de H23 à H38  et H39 pour le total de son contenu),Transit/Promo(I22 son contenu est de I23 a I38 et I39 est le total de son contenu),CA(J22 son contenu est de J23 à J38 et I39 est le total de son contenu)),   Nombre de
+Minutes par Appel(K22 son contenu est de K23 a K38 et 39 est le total de son contenu)  cette formul(=SIERREUR(ARRONDI.INF((C23+E23+G23)/(B23+D23+F23);0)&" min "&ARRONDI.SUP(MOD((C23+E23+G23)/(B23+D23+F23)*60;60);0)&" sec";"")  pour calculer son contenu de K23 à K38), NB Jours(K1)=31(L1), NB moyen
+ min par jour (L22 son contenu est de L23 a L38 et L39 est le total de son contenu) cette formule(=SIERREUR((C23+E23+G23)/$K$1;0) pour calculer son contenu de L23 à L38), ,Variation
+ M/M-1(M22 son contenu est de M23 à M38 et M39 est le total de son contenu cette formule(=SIERREUR((L23-Entrants_Decembre_2020!L23)/SI(Entrants_Decembre_2020!L23>0;Entrants_Decembre_2020!L23;L23);0) pour calculer son contenu de M23 à M38),Revenu Moyen 
+Par Minute(O22 son contenu es de O23 à O38 et O39 pour le total de son contenu)cette formul(=SIERREUR(+J23/(C23);"")pour calculer son contenu de O23 à O38),Variation
+ M/M-1(P22 son contenu est de P23 à P38 et P39 pour le total de son contenu  )cette formule (=SIERREUR((O23-Entrants_Decembre_2020!O23)/SI(Entrants_Decembre_2020!O23>0;Entrants_Decembre_2020!O23;O23);0) pour calculer son contenude P23 a P38),Net Balance(R22 son contenu est de R23 à R38 et R39 est le total de son contenu )cette formule(=J23-(Sortants_Janvier!D23+Sortants_Janvier!G23) est la formule pour cree son contenu R23 à R383),CA Annuel(S22 son contenu est de S23 à S38 S39 est le total des contenu) cette formule (=J23 )pour calculer son contenu de S23 à S38, Paiement(T22 son contenu est de T23 à T38 et T39 le total de son contenu) ,Date(U22 son contenu est de U23 à U38 et U39 EST le total de son contenu), Cumul An(V22 son contenu est de V23 à V38 et V39 est le total de son contenu ) cette formule(=R23+T23) c'est pour calcule son contenu de V23 à V38 ,Netting Internatinal depuis Janv(U39)=R39+T39 cette formul pour calculer V39. ,  TOTAL Produits
+Local + International du mois(I41) qui est le total de ca J41, TOTAL Produits
+Local + International depuis Janv(R41)=J41 pour calculer S41.,NETTING GLOBALE(U41)=V19+V39 pour calculer V41,Produit moy. Par minutes(A43)=SIERREUR(J39/(C39+E39+G39);0) setrouve dans B43 et est utiliser pour clalculer Taux Euro(A44) en B44 , Variation(C42 son contenu est C43 et C44)=SIERREUR((B43-Entrants_Decembre_2020!#REF!)/Entrants_Decembre_2020!#REF!;0)la formul est utiliser pour calculer son contenu C43 et C44,Tarifs ONATEL(D43)(Plage(D44 son contenu est de D45  a D46),Prix(E44 SON COTENU EST DE E45 a E46)),AIRTEL INT(D48)((Plage(D49son contenu est de D50  a D51),Prix(E48 SON COTENU EST DE E50 a E51)) ,(Nombre de min 
+Entrantes (Local + International) 
+Journalier(K45) =L46+L47cette formule se trouve dans L45,Variation
+ M/M-1(M44) =SIERREUR((L45-Entrants_Decembre_2020!#REF!)/Entrants_Decembre_2020!#REF!;0)cette formul se trouve dans L45,Ratio(N44)=L45/$L$45 cette formule se trouve dans N45),  ( Nombre de min 
+Entrantes Local
+Journalier(K46)=L17+L14+L10+L6 cette formule se trouve dansL46,Variation
+ M/M-1(M44)=SIERREUR((L46-Entrants_Decembre_2020!#REF!)/Entrants_Decembre_2020!#REF!;0) cette formul se trouve dans M46,Ratio(N44)=L46/$L$45 cette formule se trouve dans N45),(Nombre de min 
+Entrantes International
+Journalier(K47)=L39 cetteformule se trouve dans L47,Variation
+ M/M-1(M44)=SIERREUR((L47-Entrants_Decembre_2020!#REF!)/Entrants_Decembre_2020!#REF!;0)cette formule se trouve dans M47,Ratio(N44)=L47/$L$45 cette formul se trouve dans N47)],      dans la feuille sortants pour chaque mois et chaque annee on a le STATISTIQUES TELECEL FASO(A1) [[(OUTGOING TRAFFIC PREPAID(A2) qui contient ( NB appels(B3 son contenu est de B4 à B17 prive de B11),NB mn(C3 son contenu est de C4 à C17 prive de C11),Coût Minute(D3 son contenu est de D4 à D17 prive de D11),CA(E3 son contenu est de E4 à E17 prive de E11))effectuer par(Mobile to OrangeBF(A4),Mobile to TELMOB(A5), Mobile to other networks(A6),Fixe to onatel ouaga(A7),Fixe to onatel national(A8) ,VAS & Verts(A9),Fixe to Mobile(A10)), TOTAL Charges Local(D19) qui est la somme de ca qui est E19, NB moyen
+ min par jour(M3 son contenu est de M4 à M17 priver de M11)  cette formul qui sert a calculer son contenu qui est de M4 à M17 =SIERREUR(C4/$L$1;0))qui est NB mn et NB Jours pour chaque mois, et VariationM/M-1(N3 son conten est de N4 à N17 priver de N11)=SIERREUR((M4-Sortants_Decembre_2020!M4)/Sortants_Decembre_2020!M4;0)la formul sert a calculer son contenu de N4 à N17) ,Charges
+Annuel(O3 son contenu est de O4 à O17 prive de O11 )=E4 cette fomule sert a calculer son contenu de O4 à O17 , TOTAL Charges Local
+depuis Janv(N19)=E19 pour calculer O19.]  ,[(OUTGOING TRAFFIC POSTPAID(A11) qui contient ( NB appels(B3 son contenu est de B4 à B17 prive de B11),NB mn(C3 son contenu est de C4 à C17 prive de C11),Coût Minute(D3 son contenu est de D4 à D17 prive de D11),CA(E3 son contenu est de E4 à E17 prive de E11)) , TOTAL Produits Local du mois qui est la somme de ca qui est E19, NB moyen
+ min par jour(L3 son contenu est de L4 à L17 priver de L11)  cette formul qui sert a calculer son contenu qui est de L4 à L17 =SIERREUR(C4/$K$1;0))qui est NB mn et NB Jours pour chaque mois, et VariationM/M-1(M3 son conten est de M4 à M17 priver de M11)=SIERREUR((L4-Entrants_Decembre_2020!L4)/Entrants_Decembre_2020!L4;0)la formul sert a calculer son contenu de M4 à M17), Net Balance(R3 son contenu est de R4 à R17 prive de R11 )=E4-Sortants_Janvier!E4 cette fomule sert a calculer son contenu de R4 à R17 , TOTAL Charges Local(D19) qui est la somme de ca qui est E19, NB moyen
+ min par jour(M3 son contenu est de M4 à M17 priver de M11)  cette formul qui sert a calculer son contenu qui est de M4 à M17 =SIERREUR(C4/$L$1;0))qui est NB mn et NB Jours pour chaque mois, et VariationM/M-1(N3 son conten est de N4 à N17 priver de N11)=SIERREUR((M4-Sortants_Decembre_2020!M4)/Sortants_Decembre_2020!M4;0)la formul sert a calculer son contenu de N4 à N17) ,Charges
+Annuel(O3 son contenu est de O4 à O17 prive de O11 )=E4 cette fomule sert a calculer son contenu de O4 à O17 , TOTAL Charges Local
+depuis Janv(N19)=E19 pour calculer O19,pour les appels effectuer par ses operateurs (Mobile to OrangeBF(A12),Mobile to TELMOB(A13), Mobile to other networks(A14),Fixe to onatel ouaga(A15),Fixe to onatel national(A16) ,Fixe to Mobile(A17)],   [OUTGOING TRAFFIC INTERNATIONAL(A20) qui contient(NORMAL(Nombre(B22 son contenu est de B23 à B38 et le total de son contenu es B39),Minutes(C22 son contenu est de C23 à C38 et le total de son contenu es C39),Montant(D22 son contenu est de D23 à D38 et le total de son contenu es D39))), (ROAMING(Nombre(E22 son contenu est de E23 à E38 et le total de son contenu es E39),Minutes(F22 son contenu est de F23 à F38 et le total de son contenu es F39),Montant(G22 son contenu est de G23 à G38 et le total de son contenu es G39)))effectue par(PSTN(A23),VUTEL(A24),GATEWAY(A25),TINTEL(A26),TATA(A27),OrangeBF(28),TELMOB(A29),TOGO CELLULAIRE(A30),ORANGE CI(A31),ORANGE MALI(A32),MTN CI(A33),ARCEP(A34),BICS(A35),ATEL MALI(A36),AIRTEL INT(A37),TELECEL GLOBAL(A38),TOTAL(A39)), Nombre de
+Minutes par Appel(H22 son contenu est de H23 a H38 et H39 est le total de son contenu)  cette formul(=SIERREUR(ARRONDI.INF((F23+C23)/(E23+B23);0)&" min "&ARRONDI.SUP(MOD((F23+C23)/(E23+B23)*60;60);0)&" sec";"")  pour calculer son contenu de H23 à H38), Cout Moyen 
+Par Minute(I22)( son contenu est de I23 à I38  et I39 pour le total de son contenu) cette formul(=SIERREUR((G23+D23)/(F23+C23);"")  pour calculer son contenu de I23 à I38),Variation
+ M/M-1(J22 son contenu est de J23 a J38 et J39 est le total de son contenu)  cette formul(=SIERREUR((I23-Sortants_Decembre_2020!I23)/Sortants_Decembre_2020!I23;0) pour calculer son contenu de J23 à J38),   NB moyen
+ min par jour (M22 son contenu est de M23 a M38 et M39 est le total de son contenu) cette formule(=SIERREUR((C23+F23)/$L$1;0) pour calculer son contenu de M23 à M38), Variation
+ M/M-1(N22 son contenu est de N23 à N38 et N39 est le total de son contenu cette formule(=SIERREUR((M23-Sortants_Decembre_2020!M23)/Sortants_Decembre_2020!M23;0) pour calculer son contenu de N23 à N38),Charges
+Annuel(O22 son contenu es de O23 à O38 et O39 pour le total de son contenu)cette formul(=(G23+D23)pour calculer son contenu de O23 à O38),  TOTAL Charges 
+Local + International du mois(C41) qui est le total de Montant D41,  TOTAL Charges 
+Local + International
+depuis Janv(N41)=D41+Sortants_Decembre_2020!O39 pour calculer O41.,Cout moy. Par minutes(A43)=SIERREUR((D39+G39)/(C39+F39);0) setrouve dans B43 et est utiliser pour clalculer  B43, Variation(C42 son contenu est C43 )=SIERREUR((B43-Sortants_Decembre_2020!B41)/Sortants_Decembre_2020!B41;0)la formul est utiliser pour calculer son contenu C43  ,(Nombre de min 
+Entrantes (Local + International) 
+Journalier(L46) =M47+M48cette formule se trouve dans M46,Variation
+ M/M-1(N45) =SIERREUR((M46-Sortants_Decembre_2020!M45)/Sortants_Decembre_2020!M45;0)cette formul se trouve dans N46,Ratio(O45)=M46/$M$46 cette formule se trouve dans O46),  ( Nombre de min 
+Entrantes Local
+Journalier(L47)=M6+M10+M14+M17 cette formule se trouve dansM47,Variation
+ M/M-1(N45)=SIERREUR((M47-Sortants_Decembre_2020!M46)/Sortants_Decembre_2020!M46;0) cette formul se trouve dans N47,Ratio(O45)=M47/$M$46 cette formule se trouve dans O47),(Nombre de min 
+Entrantes International
+Journalier(L48)=M39 cetteformule se trouve dans M48,Variation
+ M/M-1(N45)=SIERREUR((M48-Sortants_Decembre_2020!M47)/Sortants_Decembre_2020!M47;0)cette formule se trouve dans N48,Ratio(O45)=M48/$M$46 cette formul se trouve dans O48,NB Jours(K1)=31(L1))] avec un code VBA bien detaille et en francais
